@@ -6,7 +6,7 @@
 * By using this software in any fashion, you are agreeing to be bound by
 * the terms of this license.
 * You must not remove this notice, or any other, from this software.
-**/ 
+**/
 import it.openutils.log4j.AlternateSMTPAppender;
 import grails.util.GrailsUtil
 import org.apache.log4j.AsyncAppender
@@ -24,6 +24,8 @@ grails.config.locations = [
 	"file:${userHome}/.grails/${appName}-config.properties"
 ]
 println "Using configuration locations ${grails.config.locations} [${GrailsUtil.environment}]"
+
+grails.databinding.useSpringBinder = true
 
 grails.exceptionresolver.params.exclude = ['password', 'passwordConfirm']
 
@@ -427,23 +429,6 @@ grails.doc.license = "Eclipse Public License - Version 1.0"
 grails.doc.copyright = ""
 grails.doc.footer = ""
 
-// Added by the Joda-Time plugin:
-grails.gorm.default.mapping = {
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentDateMidnight, class: org.joda.time.DateMidnight
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentDateTime, class: org.joda.time.DateTime
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentDateTimeZoneAsString, class: org.joda.time.DateTimeZone
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentDurationAsString, class: org.joda.time.Duration
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentInstantAsMillisLong, class: org.joda.time.Instant
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentInterval, class: org.joda.time.Interval
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentLocalDate, class: org.joda.time.LocalDate
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentLocalDateTime, class: org.joda.time.LocalDateTime
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentLocalTime, class: org.joda.time.LocalTime
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentPeriodAsString, class: org.joda.time.Period
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentTimeOfDay, class: org.joda.time.TimeOfDay
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentYearMonthDay, class: org.joda.time.YearMonthDay
-	"user-type" type: org.jadira.usertype.dateandtime.joda.PersistentYears, class: org.joda.time.Years
-}
-
 grails.plugins.dynamicController.mixins = [
     'com.burtbeckwith.grails.plugins.appinfo.IndexControllerMixin':
             'com.burtbeckwith.appinfo_test.AdminManageController',
@@ -472,3 +457,26 @@ grails.plugins.dynamicController.mixins = [
     'app.info.custom.example.MyConfigControllerMixin' :
             'com.burtbeckwith.appinfo_test.AdminManageController'
 ]
+// Uncomment and edit the following lines to start using Grails encoding & escaping improvements
+
+/* remove this line 
+// GSP settings
+grails {
+    views {
+        gsp {
+            encoding = 'UTF-8'
+            htmlcodec = 'xml' // use xml escaping instead of HTML4 escaping
+            codecs {
+                expression = 'html' // escapes values inside null
+                scriptlet = 'none' // escapes output from scriptlets in GSPs
+                taglib = 'none' // escapes output from taglibs
+                staticparts = 'none' // escapes output from static template parts
+            }
+        }
+        // escapes all not-encoded output at final stage of outputting
+        filteringCodecForContentType {
+            //'text/html' = 'html'
+        }
+    }
+}
+remove this line */

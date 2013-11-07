@@ -98,10 +98,10 @@ class BootStrap {
         }
         log.info("Finished running liquibase changelog(s)!")
 
-        //def enableFixtures = Boolean.parseBoolean(grailsApplication.config.grails.openboxes.enableFixtures?:"false")
-        //if (enableFixtures) {
-        //insertTestFixture()
-        //}
+        def enableFixtures = Boolean.parseBoolean(grailsApplication.config.grails.openboxes.enableFixtures?:"false")
+        if (enableFixtures) {
+            insertTestFixture()
+        }
 
         assignProductIdentifiers()
         assignShipmentIdentifiers()

@@ -24,6 +24,7 @@
 
     <!-- Include jQuery UI files -->
     <g:javascript library="jquery" plugin="jquery" />
+    <r:require module="jquery-ui"/>
     <jqui:resources />
     <link href="${createLinkTo(dir:'js/jquery.ui/css/smoothness', file:'jquery-ui.css')}" type="text/css" rel="stylesheet" media="screen, projection" />
 

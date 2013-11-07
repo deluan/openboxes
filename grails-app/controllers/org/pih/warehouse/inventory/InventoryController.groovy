@@ -280,7 +280,7 @@ class InventoryController {
 
     }
 
-    def mergeQuantityMap(oldQuantityMap, newQuantityMap) {
+    private mergeQuantityMap(oldQuantityMap, newQuantityMap) {
         oldQuantityMap.each { product, oldQuantity ->
             def newQuantity = newQuantityMap[product]?:0
             oldQuantityMap[product] =  newQuantity + oldQuantity
@@ -290,7 +290,7 @@ class InventoryController {
     }
 
 
-    def getDatesBetween(startDate, endDate, frequency) {
+    private getDatesBetween(startDate, endDate, frequency) {
 
         def count = 0
         def dates = []
@@ -679,11 +679,11 @@ class InventoryController {
 	}
 
 
-    def getCsvForInventoryMap(map) {
+    private getCsvForInventoryMap(map) {
         return getCsvForInventoryMap(map, [:])
     }
 
-    def getCsvForInventoryMap(map, statusMap) {
+    private getCsvForInventoryMap(map, statusMap) {
         def csv = "";
         csv += '"' + "${warehouse.message(code: 'inventoryLevel.status.label')}" + '"' + ","
         csv += '"' + "${warehouse.message(code: 'product.productCode.label')}" + '"' + ","
@@ -738,11 +738,11 @@ class InventoryController {
         return csv
     }
 
-    def getCsvForProductMap(map) {
+    private getCsvForProductMap(map) {
         return getCsvForProductMap(map, [:])
     }
 
-    def getCsvForProductMap(map, statusMap) {
+    private getCsvForProductMap(map, statusMap) {
         def csv = "";
         csv += '"' + "${warehouse.message(code: 'inventoryLevel.status.label')}" + '"' + ","
         csv += '"' + "${warehouse.message(code: 'product.productCode.label')}" + '"' + ","
