@@ -21,7 +21,7 @@ You must not remove this notice, or any other, from this software.
 
 * [Eclipse IDE for Java EE Developers](http://www.eclipse.org/downloads)
 * Java 1.6
-* [Grails 1.3.7](http://grails.org/download/archive/Grails)
+* [Grails 2.3.1](http://grails.org/download/archive/Grails)
 * MySQL 5+
 * Tomcat 6 or 7 (optional for dev envrionment)
  
@@ -34,16 +34,16 @@ If you are a user/implementer, please check out our [Installation](wiki/Installa
 
 * Install dependencies above
 * Install latest version of GVM (http://gvmtool.net/)
-* Install Grails 1.3.7
+* Install Grails 2.3.1
 ```
-gvm install grails 1.3.7
+gvm install grails 2.3.1
 ```
 
 ##### Clone repository 
 * If you are a not core contributor, fork [openboxes git repository](https://github.com/PIH/openboxes)
 * If you are a core contributor:
 ```
-        git clone git@github.com:PIH/openboxes.git      
+        git clone git@github.com:PIH/openboxes.git
 ```
 Otherwise, replace git url with the one of your forked repository
 

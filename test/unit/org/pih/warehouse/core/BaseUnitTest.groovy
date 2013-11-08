@@ -6,82 +6,77 @@
 * By using this software in any fashion, you are agreeing to be bound by
 * the terms of this license.
 * You must not remove this notice, or any other, from this software.
-**/ 
+**/
 package org.pih.warehouse.core
 
-import grails.test.*
+import grails.test.mixin.Mock
+import org.junit.Before
+import org.junit.Test
+import org.pih.warehouse.inventory.Inventory
+import org.pih.warehouse.inventory.InventoryItem
+import org.pih.warehouse.inventory.TransactionCode
+import org.pih.warehouse.inventory.TransactionType
+import org.pih.warehouse.product.Category
 
-import org.pih.warehouse.inventory.Inventory 
-import org.pih.warehouse.inventory.InventoryItem 
-import org.pih.warehouse.inventory.TransactionCode;
-import org.pih.warehouse.inventory.TransactionType 
 // import org.pih.warehouse.core.Location
-import org.pih.warehouse.product.Category;
-import org.pih.warehouse.product.Product 
+import org.pih.warehouse.product.Product
 
+@Mock([LocationType, Location, TransactionType, Category, Product, InventoryItem, Inventory])
+class BaseUnitTest {
 
-class BaseUnitTest extends GrailsUnitTestCase {
-	protected void setUp() {
-        super.setUp()
-        
-		
+    def consumptionTransactionType
+    def inventoryTransactionType
+    def productInventoryTransactionType
+    def transferInTransactionType
+    def transferOutTransactionType
 
+    @Before
+	void setUp() {
           // create some default location types
-        def warehouseLocationType = new LocationType(name: "Location", description: "Location")
-        def supplierLocationType= new LocationType(name: "Supplier", description: "Supplier")
-        mockDomain(LocationType, [ warehouseLocationType, supplierLocationType ])
+        def warehouseLocationType = new LocationType(name: "Location", description: "Location").save()
+        def supplierLocationType= new LocationType(name: "Supplier", description: "Supplier").save()
 
         // create a default location
-        def acmeSupplyCompany = new Location(name: "Acme Supply Company", locationType: supplierLocationType) 
-        
+        new Location(name: "Acme Supply Company", locationType: supplierLocationType).save()
+
         // create some default warehouses and inventories
-        def bostonLocation = new Location(name: "Boston Location", locationType: warehouseLocationType)
-        def haitiLocation = new Location(name: "Haiti Location", locationType: warehouseLocationType)
-    
-        def bostonLocationInventory = new Inventory(warehouse: bostonLocation)
-        def haitiLocationInventory = new Inventory(warehouse: haitiLocation)
-        
+        def bostonLocation = new Location(name: "Boston Location", locationType: warehouseLocationType).save()
+        def haitiLocation = new Location(name: "Haiti Location", locationType: warehouseLocationType).save()
+
+        def bostonLocationInventory = new Inventory(warehouse: bostonLocation).save()
+        def haitiLocationInventory = new Inventory(warehouse: haitiLocation).save()
+
         bostonLocation.inventory = bostonLocationInventory
         haitiLocation.inventory = haitiLocationInventory
-        
-        mockDomain(Location, [ bostonLocation, haitiLocation, acmeSupplyCompany ] )
-        //mockDomain(Inventory, [ bostonLocationInventory, haitiLocationInventory ])
-       
+
         // create some default transaction types
-        def consumptionTransactionType = new TransactionType(id: 2, name: "Consumption", transactionCode: TransactionCode.DEBIT)
-        def inventoryTransactionType = new TransactionType(id: 7, name: "Inventory", transactionCode: TransactionCode.INVENTORY)
-        def productInventoryTransactionType = new TransactionType(id: 11, name: "Product Inventory", transactionCode: TransactionCode.PRODUCT_INVENTORY)
-        def transferInTransactionType = new TransactionType(id: Constants.TRANSFER_IN_TRANSACTION_TYPE_ID, name: "Transfer In", transactionCode: TransactionCode.CREDIT)
-        def transferOutTransactionType = new TransactionType(id: Constants.TRANSFER_OUT_TRANSACTION_TYPE_ID, name: "Transfer Out", transactionCode: TransactionCode.DEBIT)
-        mockDomain(TransactionType, [ consumptionTransactionType, productInventoryTransactionType, inventoryTransactionType, transferInTransactionType, transferOutTransactionType ])
-        
-		
-		def category = new Category(id: "1", name: "Pain Medication")
-		mockDomain(Category, [category])
-		
+        consumptionTransactionType = new TransactionType(name: "Consumption", transactionCode: TransactionCode.DEBIT).save()
+        inventoryTransactionType = new TransactionType(name: "Inventory", transactionCode: TransactionCode.INVENTORY).save()
+        productInventoryTransactionType = new TransactionType(name: "Product Inventory", transactionCode: TransactionCode.PRODUCT_INVENTORY).save()
+        transferInTransactionType = new TransactionType(name: "Transfer In", transactionCode: TransactionCode.CREDIT).save()
+        transferOutTransactionType = new TransactionType(name: "Transfer Out", transactionCode: TransactionCode.DEBIT).save()
+
+
+		def category = new Category(name: "Pain Medication").save()
+
         // create some products
-        def aspirin = new Product(name: "Aspirin", category: category)
-        def tylenol = new Product(name:"Tylenol", category: category)
-        mockDomain(Product, [aspirin, tylenol])
-        
+        def aspirin = new Product(name: "Aspirin", category: category).save()
+        def tylenol = new Product(name:"Tylenol", category: category).save()
+
         // create some inventory items
-        def aspirinLot1 = new InventoryItem(product: aspirin, lotNumber: "1")
-        def aspirinLot2 = new InventoryItem(product: aspirin, lotNumber: "2")
-        def tylenolLot1 = new InventoryItem(product: tylenol, lotNumber: "1")
-        mockDomain(InventoryItem, [aspirinLot1, aspirinLot2, tylenolLot1])
-  
+        new InventoryItem(product: aspirin, lotNumber: "1").save()
+        new InventoryItem(product: aspirin, lotNumber: "2").save()
+        new InventoryItem(product: tylenol, lotNumber: "1").save()
+
     }
 
-    protected void tearDown() {
-        super.tearDown()
-    }
-	
+    @Test
 	void testDataHasBeenInitialized() {
 		assertEquals 2, LocationType.list().size()
 		assertEquals 3, Location.list().size()
 		assertEquals 5, TransactionType.list().size()
 		assertEquals 2, Product.list().size()
-		assertEquals 3, InventoryItem.list().size()		
+		assertEquals 3, InventoryItem.list().size()
 	}
-	
+
 }

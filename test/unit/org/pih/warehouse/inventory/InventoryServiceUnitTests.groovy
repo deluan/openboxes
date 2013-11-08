@@ -9,71 +9,66 @@
 **/ 
 package org.pih.warehouse.inventory
 
-import org.pih.warehouse.core.BaseUnitTest;
-import org.pih.warehouse.core.Constants;
+import grails.test.mixin.Mock
+import grails.test.mixin.TestFor
+import org.junit.Before
+import org.pih.warehouse.core.BaseUnitTest
 import org.pih.warehouse.core.Location
-// import org.pih.warehouse.product.Category;
 import org.pih.warehouse.product.Product
 
-
-
+// import org.pih.warehouse.product.Category;
+@TestFor(InventoryService)
+@Mock([Transaction, TransactionEntry])
 class InventoryServiceUnitTests extends BaseUnitTest {
 
-	protected void setUp() {
-		super.setUp()
-		mockLogging(InventoryService)
-		mockDomain(Transaction)
-	}
-	
+    @Before
+    void setUp() {
+        super.setUp()
+    }
+
 	private void setUp_transactionEntryTests() {
 		def inventory = Location.findByName("Boston Location").inventory
 		
 		// create some transactions
-		def transaction = new Transaction(transactionType: TransactionType.get(7), transactionDate: new Date() - 5, inventory: inventory)
-		def transaction2 = new Transaction(transactionType: TransactionType.get(2), transactionDate: new Date() - 4, inventory: inventory)
-		def transaction3 = new Transaction(transactionType: TransactionType.get(11), transactionDate: new Date() - 3, inventory: inventory)
-		def transaction4 = new Transaction(transactionType: TransactionType.get(8), transactionDate: new Date() - 2, inventory: inventory)
-		def transaction5 = new Transaction(transactionType: TransactionType.get(2), transactionDate: new Date() - 1, inventory: inventory)
-		
-		mockDomain(Transaction, [transaction, transaction2, transaction3, transaction4, transaction5])
-		
-		def transactionEntries = []
+		def transaction = new Transaction(transactionType: inventoryTransactionType, transactionDate: new Date() - 5, inventory: inventory).save()
+		def transaction2 = new Transaction(transactionType: consumptionTransactionType, transactionDate: new Date() - 4, inventory: inventory).save()
+		def transaction3 = new Transaction(transactionType: productInventoryTransactionType, transactionDate: new Date() - 3, inventory: inventory).save()
+		def transaction4 = new Transaction(transactionType: transferInTransactionType, transactionDate: new Date() - 2, inventory: inventory).save()
+		def transaction5 = new Transaction(transactionType: consumptionTransactionType, transactionDate: new Date() - 1, inventory: inventory).save()
 		
 		// define some aspirin lot 1 transaction entries
-		transactionEntries += new TransactionEntry (quantity:10, transaction: transaction,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1"))
-		transactionEntries += new TransactionEntry (quantity:2, transaction: transaction2,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1"))
-		transactionEntries += new TransactionEntry (quantity:100, transaction: transaction3,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1"))
-		transactionEntries += new TransactionEntry (quantity:24, transaction: transaction4,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1"))
-		transactionEntries += new TransactionEntry (quantity:30, transaction: transaction5,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1"))
+		new TransactionEntry (quantity:10, transaction: transaction,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1")).save()
+		new TransactionEntry (quantity:2, transaction: transaction2,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1")).save()
+		new TransactionEntry (quantity:100, transaction: transaction3,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1")).save()
+		new TransactionEntry (quantity:24, transaction: transaction4,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1")).save()
+		new TransactionEntry (quantity:30, transaction: transaction5,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "1")).save()
 		
 		// define some aspirin lot 2 transaction entries
-		transactionEntries += new TransactionEntry (quantity:25, transaction: transaction,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "2"))
-		transactionEntries += new TransactionEntry (quantity:2, transaction: transaction2,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "2"))
+		new TransactionEntry (quantity:25, transaction: transaction,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "2")).save()
+		new TransactionEntry (quantity:2, transaction: transaction2,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "2")).save()
 		// even though there is no entry for this lot on this transaction, it is  product inventory transaction so should reset the quantity count
-		transactionEntries += new TransactionEntry (quantity:16, transaction: transaction4,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "2"))
-		transactionEntries += new TransactionEntry (quantity:13, transaction: transaction5,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "2"))
+		new TransactionEntry (quantity:16, transaction: transaction4,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "2")).save()
+		new TransactionEntry (quantity:13, transaction: transaction5,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Aspirin"), "2")).save()
 		
 		// define some tylenol lot 1 transaction entries
-		transactionEntries += new TransactionEntry (quantity:36, transaction: transaction,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Tylenol"), "1"))
-		transactionEntries += new TransactionEntry (quantity:21, transaction: transaction2,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Tylenol"), "1"))
-		transactionEntries += new TransactionEntry (quantity:33, transaction: transaction4,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Tylenol"), "1"))
-		transactionEntries += new TransactionEntry (quantity:23, transaction: transaction5,
-			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Tylenol"), "1"))
+		new TransactionEntry (quantity:36, transaction: transaction,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Tylenol"), "1")).save()
+		new TransactionEntry (quantity:21, transaction: transaction2,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Tylenol"), "1")).save()
+		new TransactionEntry (quantity:33, transaction: transaction4,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Tylenol"), "1")).save()
+		new TransactionEntry (quantity:23, transaction: transaction5,
+			inventoryItem: InventoryItem.findByProductAndLotNumber(Product.findByName("Tylenol"), "1")).save()
 		
-		
-		mockDomain(TransactionEntry, transactionEntries)
 	}
 
 
